@@ -3,6 +3,7 @@
 Lo más reciente arriba.
 
 ## 2026-11-26
+- **Hero en iPhone:** los textos de las tarjetas se salían de su cuadro. Safari agranda el texto en pantallas angostas por su cuenta (*text size adjust*) y la ilustración estaba achicada con `zoom`. Ahora se achica con `transform: scale` y se desactiva ese agrandado automático en todo el sitio. En pantallas de menos de 370 px se achica un poco más.
 - **Barra fija** en Inicio y Contacto: se queda arriba al hacer scroll y se compacta. En mobile se esconde al bajar y vuelve al subir; el botón dice "Agendar" en pantallas chicas.
 - **El problema:** los nodos se iluminan cuando pasa el punto. *Decisión* crece y suelta dos ondas. En *Solo automatizar* los nodos se encienden apagados, en *Más archivos sueltos* los papeles se separan y salen copias que se alejan, y *Sin visibilidad* aparece después de que el dato se pierde.
 - **El resultado:** el dashboard de muestra ahora es interactivo. Pestañas por sección (Finanzas, Ventas, Operación, Logística, Personal) con sus KPIs, gráfica y tabla. *Resumen general* con "Foco del día" que rota, una tarjeta por área con semáforo (llevan a su pestaña) y "Salud de la empresa". Indicación "Explora el panel" y un recorrido corto por las pestañas cuando el panel aparece en pantalla. En mobile las secciones pasan a una fila de pestañas arriba.
