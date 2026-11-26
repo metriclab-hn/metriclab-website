@@ -2,7 +2,7 @@
 
 IDs `WEB-0xx`, estables, nunca se reutilizan. Formato y reglas: `metriclab-hq/docs/sop-repos.md`, sección 4.
 
-**Siguiente ID libre:** WEB-006
+**Siguiente ID libre:** WEB-007
 
 ## Abiertos
 
@@ -24,6 +24,7 @@ IDs `WEB-0xx`, estables, nunca se reutilizan. Formato y reglas: `metriclab-hq/do
 | ID | Pendiente | Tipo | Prioridad | Responsable | Desde | Siguiente paso |
 |---|---|---|---|---|---|---|
 | WEB-004 | Restringir CORS del webhook de contacto a metriclab.tech | mantenimiento | Baja | Álvaro Jr. | 2026-11-10 | Cambiar el header `Access-Control-Allow-Origin` en `MLB · Contacto Web` |
+| WEB-006 | Vistas previas de Cloudflare fallan en ramas que no son `main` | bug | Baja | Álvaro Jr. | 2026-11-26 | Copiar el error de *View logs* o apagar las vistas previas por rama en el Worker `metriclab` |
 | WEB-005 | Probar en un teléfono real la barra fija, las animaciones y el dashboard | mantenimiento | Media | Álvaro Jr. | 2026-11-26 | Revisar la vista previa en iPhone y Android antes del merge |
 
 ## Resueltos
@@ -57,3 +58,8 @@ Hoy el webhook responde con CORS abierto (`*`). Se puede restringir a `https://m
 ### WEB-005
 
 Las pruebas del 26-nov se hicieron con un navegador automático en 1366 px y 390 px. Falta verlo en un teléfono real: que la barra se esconda y vuelva bien al hacer scroll, que la fila de pestañas del dashboard se pueda deslizar y que las animaciones no se sientan pesadas.
+
+### WEB-006
+
+Primer PR del repo (#1, 26-nov): Workers Builds falló al armar la vista previa de la rama en los dos commits. Las publicaciones desde `main` sí funcionan y `wrangler deploy --dry-run` pasa en local, así que es la configuración de vistas previas, no el código. Mientras tanto, la vista previa se hace como página privada en Claude.
+
