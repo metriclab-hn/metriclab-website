@@ -28,7 +28,12 @@
   var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var usado = false;
 
+  var main = dash.querySelector('.dash-main');
+  var limpiar = null;
+
   function mostrar(clave, conFoco) {
+    // Altura antes del cambio, para animar hacia la nueva en vez de saltar.
+    var alto0 = main ? main.offsetHeight : 0;
     tabs.forEach(function (t) {
       var activa = t.id === 'tab-' + clave;
       t.setAttribute('aria-selected', activa ? 'true' : 'false');
@@ -43,8 +48,26 @@
         }
       }
     });
+    if (main && !quieto) {
+      if (limpiar) { main.removeEventListener('transitionend', limpiar); limpiar = null; }
+      main.style.transition = 'none';
+      main.style.height = 'auto';
+      var alto1 = main.offsetHeight;
+      if (alto1 !== alto0) {
+        main.style.height = alto0 + 'px';
+        void main.offsetHeight; // fija la altura vieja antes de animar
+        main.style.transition = 'height .4s cubic-bezier(.4,0,.2,1)';
+        main.style.height = alto1 + 'px';
+        limpiar = function (e) {
+          if (e.target !== main || e.propertyName !== 'height') return;
+          main.style.height = ''; main.style.transition = '';
+          main.removeEventListener('transitionend', limpiar); limpiar = null;
+        };
+        main.addEventListener('transitionend', limpiar);
+      } else { main.style.height = ''; main.style.transition = ''; }
+    }
     if (!usado) { usado = true; if (hint) hint.classList.add('is-done'); dash.classList.remove('demo'); }
-    if (clave !== 'general') detener();
+    if (clave === 'general') iniciar(); else detener();
   }
 
   tabs.forEach(function (t, i) {
@@ -72,26 +95,27 @@
     items.forEach(function (it, k) { it.hidden = k !== actual; });
     pips.forEach(function (p, k) { if (k === actual) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current'); });
   }
-  function iniciar() { if (quieto || reloj || items.length < 2) return; reloj = setInterval(function () { foco(actual + 1); }, 4500); }
-  function detener() { if (reloj) { clearInterval(reloj); reloj = null; } }
-  pips.forEach(function (p, k) { p.addEventListener('click', function () { detener(); foco(k); }); });
-  var focoBox = dash.querySelector('.foco');
-  if (focoBox) {
-    focoBox.addEventListener('mouseenter', detener);
-    focoBox.addEventListener('mouseleave', function () { if (!usado) iniciar(); });
-    focoBox.addEventListener('focusin', detener);
+  var enPantalla = false;
+  function iniciar() {
+    var general = document.getElementById('panel-general');
+    if (reloj || items.length < 2 || !enPantalla || (general && general.hidden)) return;
+    reloj = setInterval(function () { foco(actual + 1); }, 4000);
   }
+  function detener() { if (reloj) { clearInterval(reloj); reloj = null; } }
+  // Tocar un punto salta a esa alerta y reinicia los 4 s.
+  pips.forEach(function (p, k) { p.addEventListener('click', function () { detener(); foco(k); iniciar(); }); });
 
   // Cuando el panel entra en pantalla: un recorrido por las pestañas (una vez) y arranca el foco.
   if ('IntersectionObserver' in window) {
     var visto = false;
     new IntersectionObserver(function (entradas) {
       entradas.forEach(function (en) {
+        enPantalla = en.isIntersecting;
         if (en.isIntersecting) {
           if (!visto && !quieto) { visto = true; dash.classList.add('demo'); }
-          if (!usado) iniciar();
+          iniciar();
         } else { detener(); }
       });
     }, { threshold: 0.45 }).observe(dash);
-  } else { iniciar(); }
+  } else { enPantalla = true; iniciar(); }
 })();

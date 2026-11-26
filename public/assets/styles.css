@@ -316,3 +316,6 @@ section[id],#inicio{scroll-margin-top:76px}
 .dash-hint{align-self:stretch;justify-content:center}
 }
 .fx{z-index:2}
+/* la altura del panel se anima al cambiar de sección (sitio.js) */
+.dash-main{overflow:hidden}
+@media (max-width:600px){.dash-main{flex:none}}
