@@ -23,6 +23,7 @@ El sitio público de MetricLab: HTML + CSS + un poco de JavaScript, sin build. C
 
 - Español, **tuteo**, tono directo y humano.
 - Sin rayas largas (—) y sin frases que suenen a IA.
+- Sin puntos medios (`·`) como separador en el texto: se ven a IA. Usar palabras ("con", "en", una coma) o separar visualmente (una píldora, otra línea). En los `<title>` el separador es `|`.
 - **Nunca nombres de clientes.** Los ejemplos y el dashboard de muestra usan datos genéricos ("Sucursal Norte", "Cliente A").
 - Montos en `$`. Sin ubicación física (el enfoque es internacional).
 
